@@ -243,31 +243,3 @@ def lzaReader(path: str) -> LZS:
     br = BinaryReader(dec_data)
     lzs = br.read_struct(LZS)
     return lzs
-
-
-if __name__ == "__main__":
-    from time import perf_counter
-    start_time = perf_counter()
-    
-    lzs = lzsReader(r"G:\Dev\LZSTool\fr04_model.lzs")
-    
-    #for file in lzs.files:
-    #    print(f"File: {file.name}, Type: {file.type}, Size: {len(file.data)}")
-    
-
-    #lza_path = r"G:\Dev\LZSTool\un01002_top.lza"
-    
-    '''KEY_ARCHIVE = bytes.fromhex("1122345567889aaf5eb4cc884ab6dd00")
-    IV_ARCHIVE  = bytes.fromhex("00010203f0f5e1a2f151c69a390adefb")
-    
-    with open(lza_path, 'rb') as f:
-        enc_data = f.read()
-        dec_data = decrypt_data(enc_data, "Archive")
-        
-    br = BinaryReader(dec_data)
-    lzs = br.read_struct(LZS)'''
-    
-    print(f"Decryption, decompression and reading took {perf_counter() - start_time:.4f} seconds")
-    
-    for file in lzs.files:
-        print(f"File: {file.name}, Type: {file.type}, Size: {len(file.data)}")

@@ -1063,7 +1063,7 @@ def quat_mul_np(q1, q2):
 
 def menu_func_import(self, context):
     self.layout.operator(LZS_IMPORTER_OT_IMPORT.bl_idname,
-                        text='LZS Container Importer (.lzs)',
+                        text='BUM/LZA/LZS Importer (.bum .lza .lzs)',
                         icon='IMPORT')
 
 def register():

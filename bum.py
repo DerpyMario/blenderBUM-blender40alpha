@@ -1188,30 +1188,3 @@ class Curve:
     frameCount: int = 0
     interpolation: int = 0 # 0 = constant, 1 = linear
     frames: list = field(default=None)
-
-
-if __name__ == "__main__":
-    from utils.PyBinaryReader.binary_reader import BinaryReader
-    from lzs import lzsReader
-
-    from time import perf_counter
-    
-    start_time = perf_counter()
-
-    '''lzs = lzsReader(r"G:\Dev\LZSTool\fr04_model.lzs")
-    
-    for file in lzs.files:
-        if file.type == 1:  # Model
-            print(f"Reading model file: {file.name}")
-            br = BinaryReader(file.data)
-            bum = br.read_struct(BUM)
-            print(f"BUM has {len(bum.models)} models and {len(bum.animations)} animations.")'''
-    
-    bumPath = r"G:\Dev\blenderBUM\ch_211_01.bum"
-    with open(bumPath, "rb") as f:
-        br = BinaryReader(f.read())
-        bum = br.read_struct(BUM)
-        print(f"BUM has {len(bum.models)} models and {len(bum.animations)} animations.")
-    
-    end_time = perf_counter()
-    print(f"Execution time: {end_time - start_time:.4f} seconds")
