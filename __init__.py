@@ -16,7 +16,7 @@ bl_info = {
     "name" : "BUM/LZS Importer",
     "author" : "Al-Hydra",
     "description" : "Importer for LZS archives and BUM models/animations.",
-    "blender" : (4, 5, 0),
+    "blender" : (4, 0, 0),
     "version" : (1, 0, 0),
     "category" : "Import"
 }
@@ -147,49 +147,46 @@ class dropBUMOperator(bpy.types.Operator):
         return {'FINISHED'} 
 
 
-class LZS_FH_import(bpy.types.FileHandler):
-    bl_idname = "LZS_FH_import"
-    bl_label = "File handler for LZS files"
-    bl_import_operator = "wm.drop_lzs_operator"
-    bl_file_extensions = ".lzs"
-    bl_options = {'REGISTER', 'UNDO'}
+# bpy.types.FileHandler was introduced in Blender 4.1; guard its use accordingly.
+if bpy.app.version >= (4, 1, 0):
+    class LZS_FH_import(bpy.types.FileHandler):
+        bl_idname = "LZS_FH_import"
+        bl_label = "File handler for LZS files"
+        bl_import_operator = "wm.drop_lzs_operator"
+        bl_file_extensions = ".lzs"
 
-    @classmethod
-    def poll_drop(cls, context):
-        return (context.area and context.area.type == 'VIEW_3D')
-    
-    def draw():
-        pass
+        @classmethod
+        def poll_drop(cls, context):
+            return (context.area and context.area.type == 'VIEW_3D')
 
+        def draw(self):
+            pass
 
-class LZA_FH_import(bpy.types.FileHandler):
-    bl_idname = "LZA_FH_import"
-    bl_label = "File handler for LZA files"
-    bl_import_operator = "wm.drop_lza_operator"
-    bl_file_extensions = ".lza"
-    bl_options = {'REGISTER', 'UNDO'}
+    class LZA_FH_import(bpy.types.FileHandler):
+        bl_idname = "LZA_FH_import"
+        bl_label = "File handler for LZA files"
+        bl_import_operator = "wm.drop_lza_operator"
+        bl_file_extensions = ".lza"
 
-    @classmethod
-    def poll_drop(cls, context):
-        return (context.area and context.area.type == 'VIEW_3D')
-    
-    def draw():
-        pass
+        @classmethod
+        def poll_drop(cls, context):
+            return (context.area and context.area.type == 'VIEW_3D')
 
+        def draw(self):
+            pass
 
-class BUM_FH_import(bpy.types.FileHandler):
-    bl_idname = "BUM_FH_import"
-    bl_label = "File handler for BUM files"
-    bl_import_operator = "wm.drop_bum_operator"
-    bl_file_extensions = ".bum"
-    bl_options = {'REGISTER', 'UNDO'}
+    class BUM_FH_import(bpy.types.FileHandler):
+        bl_idname = "BUM_FH_import"
+        bl_label = "File handler for BUM files"
+        bl_import_operator = "wm.drop_bum_operator"
+        bl_file_extensions = ".bum"
 
-    @classmethod
-    def poll_drop(cls, context):
-        return (context.area and context.area.type == 'VIEW_3D')
-    
-    def draw():
-        pass
+        @classmethod
+        def poll_drop(cls, context):
+            return (context.area and context.area.type == 'VIEW_3D')
+
+        def draw(self):
+            pass
 
 
 def importLZS(lzsData, name):
@@ -1069,19 +1066,21 @@ def menu_func_import(self, context):
 def register():
     bpy.utils.register_class(LZS_IMPORTER_OT_IMPORT)
     bpy.utils.register_class(dropLZSOperator)
-    bpy.utils.register_class(LZS_FH_import)
     bpy.utils.register_class(dropLZAOperator)
-    bpy.utils.register_class(LZA_FH_import)
     bpy.utils.register_class(dropBUMOperator)
-    bpy.utils.register_class(BUM_FH_import)
+    if bpy.app.version >= (4, 1, 0):
+        bpy.utils.register_class(LZS_FH_import)
+        bpy.utils.register_class(LZA_FH_import)
+        bpy.utils.register_class(BUM_FH_import)
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
-    
+
 def unregister():
     bpy.utils.unregister_class(LZS_IMPORTER_OT_IMPORT)
     bpy.utils.unregister_class(dropLZSOperator)
-    bpy.utils.unregister_class(LZS_FH_import)
     bpy.utils.unregister_class(dropLZAOperator)
-    bpy.utils.unregister_class(LZA_FH_import)
     bpy.utils.unregister_class(dropBUMOperator)
-    bpy.utils.unregister_class(BUM_FH_import)
+    if bpy.app.version >= (4, 1, 0):
+        bpy.utils.unregister_class(LZS_FH_import)
+        bpy.utils.unregister_class(LZA_FH_import)
+        bpy.utils.unregister_class(BUM_FH_import)
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
