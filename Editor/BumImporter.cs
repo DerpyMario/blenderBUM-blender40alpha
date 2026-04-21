@@ -43,9 +43,14 @@ namespace BumImporter
 
                 string texName = Path.GetFileNameWithoutExtension(file);
 
-                // Try via AssetDatabase first (already-imported textures)
-                string assetRelPath = "Assets" + file.Substring(Application.dataPath.Length);
-                Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(assetRelPath);
+                // Try via AssetDatabase first (already-imported textures inside Assets/)
+                string assetRelPath = null;
+                if (file.StartsWith(Application.dataPath))
+                    assetRelPath = "Assets" + file.Substring(Application.dataPath.Length);
+
+                Texture2D tex = assetRelPath != null
+                    ? AssetDatabase.LoadAssetAtPath<Texture2D>(assetRelPath)
+                    : null;
 
                 if (tex == null)
                 {

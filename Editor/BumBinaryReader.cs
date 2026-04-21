@@ -82,9 +82,13 @@ namespace BumImporter
 
         public float ReadFloat()
         {
-            float v = BitConverter.ToSingle(_data, _pos);
+            // Read as explicit little-endian to be safe on any platform
+            uint bits = (uint)(_data[_pos]
+                | (_data[_pos + 1] << 8)
+                | (_data[_pos + 2] << 16)
+                | (_data[_pos + 3] << 24));
             _pos += 4;
-            return v;
+            return BitConverter.ToSingle(BitConverter.GetBytes(bits), 0);
         }
 
         public byte[] ReadBytes(int count)

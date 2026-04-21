@@ -64,34 +64,14 @@ namespace BumImporter
 
                 Texture2D tex = null;
 
-                if (ext == ".png")
+                // LoadImage handles PNG and JPEG; DDS and other compressed formats
+                // are not natively supported by Texture2D.LoadImage, but we attempt it
+                // for all types since it works for common web-format images.
+                tex = new Texture2D(2, 2);
+                if (!tex.LoadImage(entry.Data))
                 {
-                    tex = new Texture2D(2, 2);
-                    if (!tex.LoadImage(entry.Data))
-                        tex = null;
-                }
-                else
-                {
-                    // Write to temp file and attempt to load
-                    string tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ext);
-                    try
-                    {
-                        File.WriteAllBytes(tmpPath, entry.Data);
-                        byte[] imgData = File.ReadAllBytes(tmpPath);
-                        tex = new Texture2D(2, 2);
-                        if (!tex.LoadImage(imgData))
-                            tex = null;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogWarning($"[LzsImporter] Could not load texture '{entry.Name}': {ex.Message}");
-                        tex = null;
-                    }
-                    finally
-                    {
-                        if (File.Exists(tmpPath))
-                            File.Delete(tmpPath);
-                    }
+                    UnityEngine.Object.DestroyImmediate(tex);
+                    tex = null;
                 }
 
                 if (tex != null)

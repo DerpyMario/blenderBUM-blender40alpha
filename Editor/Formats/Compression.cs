@@ -122,7 +122,7 @@ namespace BumImporter.Formats
                 // Read lookback offset (little-endian uint16)
                 if (src + 2 > dataLen)
                     throw new InvalidOperationException("LZ4: not enough bytes for offset.");
-                int lookback = data[src] | (data[src + 1] << 8);
+                int lookback = (int)BitConverter.ToUInt16(data, src);
                 src += 2;
 
                 // Extend match length
