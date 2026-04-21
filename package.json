@@ -1,0 +1,8 @@
+{
+  "name": "com.alhydra.bumimporter",
+  "version": "1.0.0",
+  "displayName": "BUM/LZS Importer",
+  "description": "Unity importer for BUM model/animation files and LZS/LZA archives from Honey Parade/Marvelous games.",
+  "unity": "2021.3",
+  "type": "tool"
+}
